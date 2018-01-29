@@ -4,7 +4,9 @@ import PropTypes from 'prop-types'
 class Comment extends Component {
 
     static propsTypes = {
-        comment: PropTypes.object.isRequired
+        comment: PropTypes.object.isRequired,
+        onDelete: PropTypes.func,
+        index: PropTypes.number
     }
 
     constructor() {
@@ -33,6 +35,13 @@ class Comment extends Component {
         })
     }
 
+    handleDelete() {
+        console.log(this.props.index)
+        if (this.props.onDelete) {
+            this.props.onDelete(this.props.index)
+        }
+    }
+
     render() {
         return (
             <div className='comment'>
@@ -41,7 +50,7 @@ class Comment extends Component {
                 </div>
                 <p>{this.props.comment.content}</p>
                 <span className='comment-createdtime'>{this.state.timeString}</span>
-                <span className='comment-delete'>Delete</span>
+                <span onClick={this.handleDelete.bind(this)} className='comment-delete'>Delete</span>
             </div>
         )
     }
