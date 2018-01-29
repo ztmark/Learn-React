@@ -11,6 +11,23 @@ class CommentApp extends Component {
         }
     }
 
+    componentWillMount() {
+        this._loadComments()
+    }
+
+    _loadComments() {
+        const comments = localStorage.getItem('comments')
+        if (comments) {
+            this.setState({
+                comments: JSON.parse(comments)
+            })
+        }
+    }
+
+    _saveComments() {
+        localStorage.setItem('comments', JSON.stringify(this.state.comments))
+    }
+
     handleSubmitComment(comment) {
         if (!comment) return
         if (!comment.username) return alert('please input username')
@@ -19,6 +36,7 @@ class CommentApp extends Component {
         this.setState({
             comments: this.state.comments
         })
+        this._saveComments()
     }
 
     render() {

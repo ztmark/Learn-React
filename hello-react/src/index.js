@@ -76,8 +76,57 @@ class LessonList extends Component {
     }
 }
 
+class Input extends Component {
+    render () {
+      return (
+        <div>
+          <input onChange={this.props.handleChange} type='number' />
+        </div>
+      )
+    }
+  }
+  
+  class PercentageShower extends Component {
+    render () {
+      const show = this.props.data ?  Math.round(this.props.data * 10000) / 100 : ''
+      return (
+        <div>
+          {show}%
+        </div>
+      )
+    }
+  }
+  
+  class PercentageApp extends Component {
+    
+    constructor() {
+      super()
+      this.state = {
+        num: ''
+      }
+    }
+    
+    handleChange(event) {
+        console.log(event.target.value)
+      this.setState({
+        num: event.target.value
+      })
+    }
+    
+    render () {
+      return (
+        <div>
+          <Input handleChange={this.handleChange.bind(this)} />
+          <PercentageShower data={this.state.num} />
+        </div>
+      )
+    }
+  }
+  
+
 ReactDOM.render(
     //<Index />,
-    <LessonList lessonList={lessons} />,
+    //<LessonList lessonList={lessons} />,
+    <PercentageApp />,
     document.getElementById('root')
 )
