@@ -1,16 +1,5 @@
 
 
-let appState = {
-    title: {
-        text: 'React.js 小书',
-        color: 'red',
-    },
-    content: {
-        text: 'React.js 小书内容',
-        color: 'blue'
-    }
-}
-
 function renderApp(newAppState, oldAppState = {}) {
     if (newAppState === oldAppState) {
         return
@@ -41,6 +30,18 @@ function renderContent(newContent, oldContent = {}) {
 }
 
 function stateChanger(state, action) {
+    if (!state) {
+        state = {
+            title: {
+                text: 'React.js 小书',
+                color: 'red',
+            },
+            content: {
+                text: 'React.js 小书内容',
+                color: 'blue'
+            }
+        }
+    }
     switch (action.type) {
         case 'UPDATE_TITLE_TEXT':
             const n1 = {
@@ -65,19 +66,21 @@ function stateChanger(state, action) {
     }
 }
 
-function createStore(state, stateChanger) {
+function createStore(reducer) {
+    let state = null
     const listeners = []
     const subscribe = (listener) => listeners.push(listener)
     const getState = () => state
     const dispatch = (action) => {
         const old = state
-        state = stateChanger(state, action)
+        state = reducer(state, action)
         listeners.forEach((listener) => listener())
     }
+    dispatch({})
     return { getState, dispatch, subscribe }
 }
 
-const store = createStore(appState, stateChanger)
+const store = createStore(stateChanger)
 let oldState = store.getState()
 store.subscribe(() => {
     const newState = store.getState()
