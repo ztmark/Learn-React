@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from './react-redux'
 
 class ThemeSwitch extends Component {
 
     static contextTypes = {
-        store: PropTypes.object
+        store: PropTypes.object,
+        onSwitchColor: PropTypes.func
     }
 
     constructor() {
@@ -25,11 +27,9 @@ class ThemeSwitch extends Component {
 
     // dispatch action 去改变颜色
     handleSwitchColor(color) {
-        const { store } = this.context
-        store.dispatch({
-            type: 'CHANGE_COLOR',
-            themeColor: color
-        })
+        if (this.props.onSwitchColor) {
+            this.props.onSwitchColor(color)
+        }
     }
 
     render() {
@@ -43,5 +43,19 @@ class ThemeSwitch extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        themeColor: state.themeColor
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSwitchColor: (color) => {
+            dispatch({ type: 'CHANGE_COLOR', themeColor: color })
+        }
+    }
+}
+ThemeSwitch = connect(mapStateToProps, mapDispatchToProps)(ThemeSwitch)
 
 export default ThemeSwitch
